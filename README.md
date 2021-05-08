@@ -1,3 +1,3 @@
 # pirate_speak
 
-Avast! A fun little project of mine trying to make input text sound more piratey!
+A fun little project of mine trying to make input text sound more piratey! Just run the file and try typing some stuff in!
