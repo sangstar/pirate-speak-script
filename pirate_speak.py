@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 # ---
 # jupyter:
 #   jupytext:
@@ -19,6 +20,7 @@ import numpy as np
 import re
 import sys
 import os
+import csv
 
 
 # %%
@@ -26,25 +28,40 @@ class piratey_speak:
     
     
     def __init__(self):
-            print("To close, type: Exit")
+            print("To close, type: Exit\n\n\n")
             self.to_translate = ""
+            self.present_participles = self.get_present_participles()
             self.piratey_mappings = {"Ahoy":["Hello","Hey"],"'n":"and",'be':['is','am','are'], 'aye':['yes','yup','yeah'],'me':'my','ye':'you','hearties':['friends','companions','buddies'],'lad':['young man','young male'],'matey':['friend','dude','bro','mate'],'bounty':['reward', 'prize']}
             while True:
-                self.to_translate = input("Translate: ")
+                self.to_translate = input("\nTranslate: ")
                 if self.to_translate != "Exit":
                     self.translation = self.replace_lingo()
-                    print('====> ',self.translation)
+                    print('\n====> ',self.translation)
                 else:
                     sys.exit()
-                
+    
+    
+    def get_present_participles(self):
+        present_participles = set()
+        with open("verbs-all.csv", "r",encoding = 'ISO-8859–1') as f:
+            reader = csv.reader(f)
+            contents = list(reader)
+        for i in range(len(contents)):
+            current = contents[i][0].split("\t")
+            current = [vals.rstrip() for vals in current]
+            present_participles.add(current[-1])
+        present_participles.add("having")
+        present_participles.add("being")
+        return present_participles        
         
     def replace_lingo(self):
         text = self.to_translate
         words = self.piratey_mappings
         text = re.findall(r"[\w']+|[.,!?;]", text)
         items = list(words.items())
+        present_participles = self.present_participles
         for subtext in text:
-            if subtext.endswith("ing"):
+            if subtext.lower() in present_participles:
                 text_matchin_location = np.where([subtext.endswith("ing") for subtext in text])[0][0]  # Hopefully the joke with the naming is ascertained here.. 
                 text[text_matchin_location] = subtext.replace("ing","in'")
             for word in words.values():
@@ -102,7 +119,7 @@ class piratey_speak:
                     if translated[i].isalpha() or "'" in translated[i]: # Words contain apostrophes
                         fixed_array.append(translated[i])
             else:
-                    if translated[i].isalpha() or "'" in translated[i]: # No need for refactor if only appearing twice
+                    if translated[i].isalpha() or "'" in translated[i]: 
                         fixed_array.append(translated[i])
                 
         return fixed_array
@@ -112,7 +129,5 @@ class piratey_speak:
 
 # %%
 piratey_speak().translation
-
-# %%
 
 # %%
