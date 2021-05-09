@@ -31,7 +31,7 @@ class piratey_speak:
             print("To close, type: Exit\n\n\n")
             self.to_translate = ""
             self.present_participles = self.get_present_participles()
-            self.piratey_mappings = {"fer":"for","o'":"of","'ere":"here","Ahoy":["hello","hey","yo"],"'n":"and",'be':['is','am','are'], 'aye':['yes','yup','yeah'],'me':'my','ye':'you','hearties':['friends','companions','buddies'],'lad':['young man','young male'],'matey':['friend','dude','bro','mate'],'bounty':['reward', 'prize']}
+            self.piratey_mappings = {"i be":["i'm", "im"],"fer":"for","o'":"of","'ere":"here","ahoy":["hello","hey","yo"],"'n":"and",'be':['is','am','are'], 'aye':['yes','yup','yeah'],'me':'my','ye':'you','hearties':['friends','companions','buddies'],'lad':['young man','young male'],'matey':['friend','dude','bro','mate'],'bounty':['reward', 'prize']}
             while True:
                 self.to_translate = input("\nTranslate: ")
                 if self.to_translate != "Exit":
@@ -89,10 +89,8 @@ class piratey_speak:
                             pirate_word = pirate_word.capitalize()
                             text[text_match_location] = pirate_word
                         else:
-                            text[text_match_location] = pirate_word                        
-        #print('Text before fixed: ', text)
+                            text[text_match_location] = pirate_word 
         text = self.fix_punctuation(text)
-        #print('Fixed text: ', text)
         full_text = " ".join(text)
         return full_text
     
@@ -108,20 +106,20 @@ class piratey_speak:
     def fix_punctuation(self, translated):
         fixed_array = []
         for i in range(len(translated)):
-            #print('Current str: ',translated[i])
-            #print('i = ',i)
-            if i < len(translated)-1:
-                if (not translated[i+1].isalpha() and "'" not in translated[i+1]):
-                    #print(translated[i+1], ' is not a word.')
-                    new_str = str(translated[i]) + str(translated[i+1])
-                    #print('New string: ',new_str)
-                    fixed_array.append(new_str)
-                else:
-                    if translated[i].isalpha() or "'" in translated[i]: # Words contain apostrophes
-                        fixed_array.append(translated[i])
+            if " " in translated[i]:
+                fixed_array.append(translated[i])
             else:
-                    if translated[i].isalpha() or "'" in translated[i]: 
-                        fixed_array.append(translated[i])
+                if i < len(translated)-1 and " " not in translated[i+1]:
+                    if (not translated[i+1].isalpha() and "'" not in translated[i+1]):
+                        new_str = str(translated[i]) + str(translated[i+1])
+                        fixed_array.append(new_str)
+                    else:
+                        if translated[i].isalpha() or "'" in translated[i]: # Words contain apostrophes
+                            fixed_array.append(translated[i])
+                else:
+                        if translated[i].isalpha() or "'" in translated[i]:
+                            fixed_array.append(translated[i])
+
                 
         return fixed_array
             
@@ -130,3 +128,5 @@ class piratey_speak:
 
 # %%
 piratey_speak().translation
+
+# %%
