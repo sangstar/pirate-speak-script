@@ -31,7 +31,7 @@ class piratey_speak:
             print("To close, type: Exit\n\n\n")
             self.to_translate = ""
             self.present_participles = self.get_present_participles()
-            self.piratey_mappings = {"Ahoy":["Hello","Hey"],"'n":"and",'be':['is','am','are'], 'aye':['yes','yup','yeah'],'me':'my','ye':'you','hearties':['friends','companions','buddies'],'lad':['young man','young male'],'matey':['friend','dude','bro','mate'],'bounty':['reward', 'prize']}
+            self.piratey_mappings = {"fer":"for","o'":"of","'ere":"here","Ahoy":["hello","hey","yo"],"'n":"and",'be':['is','am','are'], 'aye':['yes','yup','yeah'],'me':'my','ye':'you','hearties':['friends','companions','buddies'],'lad':['young man','young male'],'matey':['friend','dude','bro','mate'],'bounty':['reward', 'prize']}
             while True:
                 self.to_translate = input("\nTranslate: ")
                 if self.to_translate != "Exit":
@@ -64,6 +64,9 @@ class piratey_speak:
             if subtext.lower() in present_participles:
                 text_matchin_location = np.where([subtext.endswith("ing") for subtext in text])[0][0]  # Hopefully the joke with the naming is ascertained here.. 
                 text[text_matchin_location] = subtext.replace("ing","in'")
+            if subtext.endswith('ingly'):
+                text_matchin_location = np.where([subtext.endswith("ingly") for subtext in text])[0][0]  # Hopefully the joke with the naming is ascertained here.. 
+                text[text_matchin_location] = subtext.replace("ingly","in'ly")
             for word in words.values():
                 if not isinstance(word, list):
                     if word.lower() == subtext.lower():
@@ -79,8 +82,6 @@ class piratey_speak:
                     if subtext.lower() in [words.lower() for words in word]:
                         word_location = np.where([subtext.lower() == option.lower() for option in word])[0][0]
                         word = word[word_location]
-                        print('word : ',word)
-                        print('subtext : ', subtext)
                         val_location = self.find_key_index(list(words.values()),subtext.lower())
                         text_match_location = np.where([subtxt.lower() == word.lower() for subtxt in text])[0][0]
                         pirate_word = list(words)[val_location]
