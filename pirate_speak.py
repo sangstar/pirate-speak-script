@@ -96,8 +96,3 @@ class piratey_speak:
 
 # %%
 piratey_speak().translation
-
-# %%
-# To fix puncutuation: If next element isn't a letter, add it to the end of the last element
-
-# %%
