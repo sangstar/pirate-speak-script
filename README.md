@@ -5,6 +5,5 @@ A fun little project of mine trying to make input text sound more piratey! Just 
 
 # To-do:
 
-1. Allow for case insensitivity
-2. Fix spacing with punctuation
-3. Add more piratey mappings!
+1. Add more piratey mappings!
+
