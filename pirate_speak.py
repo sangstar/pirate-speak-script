@@ -96,3 +96,6 @@ class piratey_speak:
 
 # %%
 piratey_speak().translation
+
+# %%
+# remove two authors?
