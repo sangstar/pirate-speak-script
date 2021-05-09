@@ -49,19 +49,29 @@ class piratey_speak:
                 text[text_matchin_location] = subtext.replace("ing","in'")
             for word in words.values():
                 if not isinstance(word, list):
-                    if word == subtext:
+                    if word.lower() == subtext.lower():
                         match_location = np.where([word == value for value in list(words.values())])[0][0]
-                        text_match_location = np.where([subtext == word for subtext in text])[0][0]
+                        text_match_location = np.where([subtext.lower() == word.lower() for subtext in text])[0][0]
                         pirate_word = list(words)[match_location]
-                        text[text_match_location] = pirate_word
+                        if subtext[0].isupper():
+                            pirate_word = pirate_word.capitalize()
+                            text[text_match_location] = pirate_word
+                        else:
+                            text[text_match_location] = pirate_word
                 else: 
-                    if subtext in word:
-                        word_location = np.where([subtext == option for option in word])[0][0]
+                    if subtext.lower() in [words.lower() for words in word]:
+                        word_location = np.where([subtext.lower() == option.lower() for option in word])[0][0]
                         word = word[word_location]
-                        val_location = self.find_key_index(list(words.values()),subtext)
-                        text_match_location = np.where([subtext == word for subtext in text])[0][0]
+                        print('word : ',word)
+                        print('subtext : ', subtext)
+                        val_location = self.find_key_index(list(words.values()),subtext.lower())
+                        text_match_location = np.where([subtxt.lower() == word.lower() for subtxt in text])[0][0]
                         pirate_word = list(words)[val_location]
-                        text[text_match_location] = pirate_word
+                        if subtext[0].isupper():
+                            pirate_word = pirate_word.capitalize()
+                            text[text_match_location] = pirate_word
+                        else:
+                            text[text_match_location] = pirate_word                        
         #print('Text before fixed: ', text)
         text = self.fix_punctuation(text)
         #print('Fixed text: ', text)
@@ -79,16 +89,22 @@ class piratey_speak:
                     
     def fix_punctuation(self, translated):
         fixed_array = []
-        for i in range(len(translated)-1):
+        for i in range(len(translated)):
             #print('Current str: ',translated[i])
-            if (not translated[i+1].isalpha() and "'" not in translated[i+1]):
-                #print(translated[i+1], ' is not a word.')
-                new_str = str(translated[i]) + str(translated[i+1])
-                #print('New string: ',new_str)
-                fixed_array.append(new_str)
+            #print('i = ',i)
+            if i < len(translated)-1:
+                if (not translated[i+1].isalpha() and "'" not in translated[i+1]):
+                    #print(translated[i+1], ' is not a word.')
+                    new_str = str(translated[i]) + str(translated[i+1])
+                    #print('New string: ',new_str)
+                    fixed_array.append(new_str)
+                else:
+                    if translated[i].isalpha() or "'" in translated[i]: # Words contain apostrophes
+                        fixed_array.append(translated[i])
             else:
-                if translated[i].isalpha() or "'" in translated[i]: # Words contain apostrophes
-                    fixed_array.append(translated[i])
+                    if translated[i].isalpha() or "'" in translated[i]: # No need for refactor if only appearing twice
+                        fixed_array.append(translated[i])
+                
         return fixed_array
             
                 
@@ -98,4 +114,5 @@ class piratey_speak:
 piratey_speak().translation
 
 # %%
-# remove two authors?
+
+# %%
